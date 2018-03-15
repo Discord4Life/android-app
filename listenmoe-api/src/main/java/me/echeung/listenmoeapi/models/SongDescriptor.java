@@ -19,6 +19,13 @@ public class SongDescriptor implements Parcelable {
     private String image;
     private String releaseDate;
 
+    public String getName(boolean preferRomaji) {
+        if (preferRomaji && nameRomaji != null && !nameRomaji.isEmpty()) {
+            return nameRomaji;
+        }
+        return name;
+    }
+
     @Override
     public int describeContents() {
         return 0;

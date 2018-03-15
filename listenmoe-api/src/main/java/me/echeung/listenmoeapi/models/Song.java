@@ -2,6 +2,7 @@ package me.echeung.listenmoeapi.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 
@@ -35,24 +36,38 @@ public class Song implements Parcelable {
     private boolean favorite;
 
     public String getAlbumString() {
-        StringBuilder s = new StringBuilder();
-        if (albums != null) {
-            for (SongDescriptor album : albums) {
-                if (s.length() != 0)
-                    s.append(", ");
-                s.append(album.getName());
-            }
-        }
-        return s.toString();
+        return getAlbumString(false);
+    }
+
+    public String getAlbumString(boolean preferRomaji) {
+        return getSongDescriptorString(albums, preferRomaji);
     }
 
     public String getArtistString() {
+        return getArtistString(false);
+    }
+
+    public String getArtistString(boolean preferRomaji) {
+        return getSongDescriptorString(artists, preferRomaji);
+    }
+
+    public String getSourceString() {
+        return getSourceString(false);
+    }
+
+    public String getSourceString(boolean preferRomaji) {
+        return getSongDescriptorString(sources, preferRomaji);
+    }
+
+    @NonNull
+    private String getSongDescriptorString(List<SongDescriptor> descriptors, boolean preferRomaji) {
         StringBuilder s = new StringBuilder();
-        if (artists != null) {
-            for (SongDescriptor artist : artists) {
-                if (s.length() != 0)
+        if (descriptors != null) {
+            for (SongDescriptor descriptor : descriptors) {
+                if (s.length() != 0) {
                     s.append(", ");
-                s.append(artist.getName());
+                }
+                s.append(descriptor.getName(preferRomaji));
             }
         }
         return s.toString();
@@ -60,7 +75,7 @@ public class Song implements Parcelable {
 
     @Override
     public String toString() {
-        return String.format("%s - %s", getTitle(), getArtistString());
+        return String.format("%s - %s", getTitle(), getArtistString(false));
     }
 
     public String getAlbumArtUrl() {
